@@ -1,0 +1,7 @@
+devices:
+- path: "/dev/spidev0.0"
+  channels:
+    1:
+      name: "Channel 1"
+    2:
+      name: "Channel 2"

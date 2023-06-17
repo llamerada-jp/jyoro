@@ -15,6 +15,8 @@ import (
 	host "periph.io/x/host/v3"
 )
 
+const Vref = 3.33
+
 func main() {
 	buf, err := os.ReadFile("config.yaml")
 	if err != nil {
@@ -41,17 +43,17 @@ func main() {
 	}
 	defer p.Close()
 
-	c, err := p.Connect(physic.MegaHertz, spi.Mode0, 8)
+	c, err := p.Connect(10*physic.KiloHertz, spi.Mode3, 8)
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	for {
 		time.Sleep(1 * time.Second)
-		for i := 0; i < 8; i++ {
+		for ch := 0; ch < 8; ch++ {
 			write := []byte{
-				0x06 | ((0x7 & byte(i)) >> 2),
-				(byte(i) & 0x03) << 6,
+				0x06 | ((0x7 & byte(ch)) >> 2),
+				(byte(ch) & 0x03) << 6,
 				0x00,
 			}
 
@@ -61,7 +63,7 @@ func main() {
 			}
 
 			readBin := (float64(read[1]&0x0f)*256 + float64(read[2])) / 4096.0
-			fmt.Printf("%d %f\n", i, readBin)
+			fmt.Printf("%d %f\n", ch, Vref*readBin)
 		}
 		fmt.Println("----")
 	}

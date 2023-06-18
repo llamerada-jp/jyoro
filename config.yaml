@@ -1,7 +1,11 @@
-devices:
-- path: "/dev/spidev0.0"
-  channels:
-    1:
-      name: "Channel 1"
-    2:
-      name: "Channel 2"
+spi_path: "/dev/spidev0.0"
+v_ref: 3.3
+threshold_dry_probes: 2
+spray_duration: "1m"
+probes:
+  0:
+    name: "Dalmatie"
+  1:
+    name: "Pastilliere"
+  2:
+    name: "Boujassotte Grise"

@@ -1,43 +1,71 @@
-# jyoro
+# Jyoro🔌
 
-## system
-TBD
+## What's this?
 
-## setup software
+RaspberryPiのUSBの給電を外部から制御するためのプログラムです。</br>
+This program is for controlling the power supply of RaspberryPi USB from the outside.
+
+## Use case
+
+- USB給電のポンプを使った自動水やり</br>
+  Automatic watering using USB-powered pumps.
+
+## Setup device
 
 ### OS
+
 - [Raspberry Pi OS](https://www.raspberrypi.com/software/)
-- [Enable SPI](https://www.raspberrypi-spy.co.uk/2014/08/enabling-the-spi-interface-on-the-raspberry-pi/)
 
-### hub-ctrl
+### uhubctl
 
-- [hub-ctrl](https://www.gniibe.org/development/ac-power-control-by-USB-hub/index.html)
-- [an issue of combination raspberry pi and hub-ctrl](https://forums.raspberrypi.com/viewtopic.php?t=242059)
+- [uhubctl](https://github.com/mvp/uhubctl)
 
 ```sh
+# at Raspberry Pi
 sudo apt-get install libusb-dev
-wget http://www.gniibe.org/oitoite/ac-power-control-by-USB-hub/hub-ctrl.c
-gcc -O2 hub-ctrl.c -o hub-ctrl-armhf-static -lusb -static
-sudo cp hub-ctrl-armhf-static /usr/local/bin/hub-ctrl
+git clone https://github.com/mvp/uhubctl
+cd uhubctl
+make
+sudo make install
 ```
 
-## configuration
+### Build
 
-### example
-
-```yaml
-spi_path: "/dev/spidev0.0"
-v_ref: 3.3
-threshold_dry_probes: 2
-spray_duration: "1m"
-probes:
-  0:
-    name: "Dalmatie"
-    a: 0.33
-    b: -0.1
-    threshold_dry: 0.5
-  1:
-    name: "Pastilliere"
-  2:
-    name: "Boujassotte Grise"
+```sh
+# at Raspberry Pi working directory
+git clone https://github.com/llamerada-jp/jyoro.git
+make -C jyoro
 ```
+
+### Setup
+
+Check your machines USB location & port like the followings
+```sh
+Current status for hub 1-1 👈️ location
+  Port 1: 0503 power highspeed enable connect
+  Port 2: 0000 off 👈️ target port
+  Port 3: 0100 power
+  Port 4: 0100 power
+  Port 5: 0100 power
+```
+
+Prepare a configuration file like the following:
+
+```json
+{
+	"location": "Asia/Tokyo", // 👈️  IANA Time Zone
+  "entries": [
+		{
+      "location": "1-1", // 👈️ the location you looked up
+      "port": 2, // 👈️ the port you looked up
+		  "start_at": "08:00:00",
+			"duration": "15m"
+		}
+	]
+}
+
+```
+
+```sh
+```
+

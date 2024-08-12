@@ -1,0 +1,11 @@
+{
+	"location": "Asia/Tokyo",
+  "entries": [
+		{
+      "location": "1-1",
+      "port": 2,
+		  "start_at": "08:00:00",
+			"duration": "15m"
+		}
+	]
+}

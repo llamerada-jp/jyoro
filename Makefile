@@ -1,0 +1,6 @@
+build:
+	go build -o ./jyoro ./cmd/...
+
+.PHONY: test
+test:
+	go test -v ./...
